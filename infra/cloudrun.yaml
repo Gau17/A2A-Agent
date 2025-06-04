@@ -1,0 +1,67 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: buyer-concierge
+  annotations:
+    # For more annotation options, see:
+    # https://cloud.google.com/run/docs/configuring/services/metadata
+    run.googleapis.com/launch-stage: BETA
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: "0" # Corresponds to --min-instances 0
+        autoscaling.knative.dev/maxScale: "2" # Example: max 2 instances
+        # run.googleapis.com/cpu-throttling: "false" # Can be useful for CPU intensive apps
+    spec:
+      containerConcurrency: 80 # Default, adjust based on application needs
+      timeoutSeconds: 300 # Default, adjust as needed
+      serviceAccountName: "your-gcp-service-account-email@your-project-id.iam.gserviceaccount.com" # TODO: Replace with your Service Account
+      containers:
+        - image: buyer-concierge-image # This would be the image built (e.g., by Cloud Build from --source . or pushed to GCR/Artifact Registry)
+          ports:
+            - name: http1
+              containerPort: 8080
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "512Mi"
+            # requests: # Optional: specify requests if needed
+            #   cpu: "250m"
+            #   memory: "256Mi"
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: LOG_LEVEL
+              value: "INFO"
+            # Add other necessary environment variables
+            # Example for DATABASE_URL if using Cloud SQL Proxy (sidecar pattern not shown here)
+            # - name: DATABASE_URL
+            #   value: "postgresql+asyncpg://user:pass@/dbname?host=/cloudsql/project:region:instance"
+            # Secrets can be mounted as env vars or volumes
+            # Refer to: https://cloud.google.com/run/docs/configuring/secrets
+          startupProbe:
+            initialDelaySeconds: 0
+            timeoutSeconds: 240 # Max value, startup can take time for cold starts
+            periodSeconds: 240  # Should be same as timeoutSeconds for startup
+            failureThreshold: 1
+            tcpSocket:
+              port: 8080
+  traffic:
+    - percent: 100
+      latestRevision: true
+
+---
+# You would typically have a similar definition for supplier-quoter
+# apiVersion: serving.knative.dev/v1
+# kind: Service
+# metadata:
+#   name: supplier-quoter
+# spec:
+#   template:
+#     spec:
+#       containers:
+#         - image: supplier-quoter-image
+#           ports:
+#             - containerPort: 8080
+# ... (similar configuration) 

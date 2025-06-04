@@ -1,0 +1,73 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: ${DB_USER:-user} # Use DB_USER from .env or default to 'user'
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password} # Use DB_PASSWORD from .env or default to 'password'
+      POSTGRES_DB: ${DB_NAME:-a2a_procurement_db} # Use DB_NAME from .env or default to 'a2a_procurement_db'
+    ports:
+      - "5432:5432" # Expose PostgreSQL port to host (optional, for external tools)
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-user} -d $${POSTGRES_DB:-a2a_procurement_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  buyer_concierge:
+    build:
+      context: ..
+      dockerfile: buyer_concierge/Dockerfile
+    ports:
+      - "8000:8080" # Expose BuyerConcierge on host port 8000
+    container_name: buyer_concierge_app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DB_HOST=postgres # Ensure BuyerConcierge uses the Docker service name for DB_HOST
+      - DB_USER=${DB_USER:-user}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_NAME=${DB_NAME:-a2a_procurement_db}
+      - SUPPLIER_QUOTER_URL=http://supplier_quoter:8080/a2a # Added for clarity
+      # TEST_AUTH_BYPASS can be set here or in an .env file
+    volumes:
+      - ../buyer_concierge:/app/buyer_concierge
+      - ../shared:/app/shared
+      - ../libs:/app/libs
+      - ../pyproject.toml:/app/pyproject.toml # Mount pyproject.toml for hot-reloading dev dependencies
+    command: uvicorn buyer_concierge.main:app --host 0.0.0.0 --port 8080 --reload
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for postgres to be healthy
+
+  supplier_quoter:
+    build:
+      context: ..
+      dockerfile: supplier_quoter/Dockerfile
+    ports:
+      - "8001:8080" # Expose SupplierQuoter on host port 8001
+    container_name: supplier_quoter_app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DB_HOST=postgres # Ensure SupplierQuoter also uses the Docker service name if it needs DB
+      - DB_USER=${DB_USER:-user}
+      - DB_PASSWORD=${DB_PASSWORD:-password}
+      - DB_NAME=${DB_NAME:-a2a_procurement_db}
+      # TEST_AUTH_BYPASS can be set here or in an .env file
+    volumes:
+      - ../supplier_quoter:/app/supplier_quoter
+      - ../shared:/app/shared
+      - ../libs:/app/libs
+      - ../pyproject.toml:/app/pyproject.toml # Mount pyproject.toml for hot-reloading dev dependencies
+    command: uvicorn supplier_quoter.main:app --host 0.0.0.0 --port 8080 --reload
+    depends_on:
+      postgres:
+        condition: service_healthy # Wait for postgres to be healthy
+
+volumes:
+  pgdata: # Defines the named volume for PostgreSQL data
+
+networks:
+  default:
+    driver: bridge 

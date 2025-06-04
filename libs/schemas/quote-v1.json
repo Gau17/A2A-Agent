@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SubmitQuote",
+  "type": "object",
+  "required": ["rfqId", "supplierId", "items", "totalPrice", "currency", "validUntil"],
+  "properties": {
+    "rfqId": {"type": "string", "description": "ID of the original RFQ"},
+    "supplierId": {"type": "string", "description": "Identifier for the supplier"},
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["partNumber", "quantity", "unitPrice", "leadTimeDays"],
+        "properties": {
+          "partNumber": {"type": "string"},
+          "quantity": {"type": "integer", "minimum": 1},
+          "unitPrice": {"type": "number", "exclusiveMinimum": 0},
+          "leadTimeDays": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "totalPrice": {"type": "number", "exclusiveMinimum": 0},
+    "currency": {"type": "string", "enum": ["USD", "EUR", "JPY"]},
+    "validUntil": {"type": "string", "format": "date"}
+  }
+} 

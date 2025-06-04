@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SubmitRFQ",
+  "type": "object",
+  "required": ["bom", "currency", "deadline"],
+  "properties": {
+    "bom": { "type": "array", "items": {
+        "type": "object",
+        "required": ["partNumber","qty","spec"],
+        "properties": {
+          "partNumber": {"type":"string"},
+          "qty": {"type":"integer","minimum":1},
+          "spec": {"type":"string"}
+        } }
+    },
+    "currency": {"type":"string","enum":["USD","EUR","JPY"]},
+    "deadline": {"type":"string","format":"date"}
+  }
+} 

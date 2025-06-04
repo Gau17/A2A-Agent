@@ -1,0 +1,52 @@
+[project]
+name = "a2a-procurement"
+version = "0.1.0"
+description = "SMB Procurement Concierge using A2A protocol"
+authors = [{name = "AI Agent", email = "ai.agent@example.com"}]
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi",
+  "uvicorn[standard]",
+  "pydantic>=2.7",
+  "pgvector",
+  "sqlmodel",
+  "authlib",
+  "langchain",
+  "asyncpg",
+  "opentelemetry-api",
+  "jsonschema",
+  "pydantic-settings",
+  "httpx",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "pytest-asyncio",
+  "ruff",
+  "black",
+  "mypy",
+  "datamodel-code-generator",
+  "testcontainers",
+  "coverage"
+]
+
+[tool.setuptools]
+packages = [
+    "buyer_concierge",
+    "supplier_quoter",
+    "shared",
+    "libs"
+]
+
+[tool.ruff]
+line-length = 88
+
+[tool.black]
+line-length = 88
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+strict = true 

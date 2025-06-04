@@ -1,0 +1,9 @@
+{
+  "name": "Buyer Concierge",
+  "description": "Submits RFQs and collates supplier quotes",
+  "entrypoint": "/a2a", 
+  "capabilities": [
+    { "actionType": "SubmitRFQ", "schema": "https://your-domain.com/schemas/rfq-v1.json" } 
+  ],
+  "auth": { "type": "oauth2-service-account" }
+} 
