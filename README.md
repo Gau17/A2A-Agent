@@ -39,7 +39,7 @@ For detailed instructions on:
 *   Manual testing with cURL examples
 *   Executing unit and integration tests
 
-Please refer to the **[A2A Procurement Application README](./a2a-procurement/README.md)**.
+Please refer to the **[A2A Procurement Application README](./README_detailed.md)**.
 
 ## Development & Contributions
 
