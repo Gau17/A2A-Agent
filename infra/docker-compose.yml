@@ -30,7 +30,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD:-password}
       - DB_NAME=${DB_NAME:-a2a_procurement_db}
       - SUPPLIER_QUOTER_URL=http://supplier_quoter:8080/a2a # Added for clarity
-      # TEST_AUTH_BYPASS can be set here or in an .env file
+      - TEST_AUTH_BYPASS=true # Explicitly set for integration tests and local dev
     volumes:
       - ../buyer_concierge:/app/buyer_concierge
       - ../shared:/app/shared
@@ -54,7 +54,7 @@ services:
       - DB_USER=${DB_USER:-user}
       - DB_PASSWORD=${DB_PASSWORD:-password}
       - DB_NAME=${DB_NAME:-a2a_procurement_db}
-      # TEST_AUTH_BYPASS can be set here or in an .env file
+      - TEST_AUTH_BYPASS=true # Explicitly set for integration tests and local dev
     volumes:
       - ../supplier_quoter:/app/supplier_quoter
       - ../shared:/app/shared

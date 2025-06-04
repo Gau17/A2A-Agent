@@ -13,6 +13,8 @@ from .catalog import PRODUCT_CATALOG, DEFAULT_UNKNOWN_ITEM_PRICE, DEFAULT_UNKNOW
 
 # from shared.auth import verify_token # Placeholder
 from shared.logging import get_logger
+from shared.settings import settings # Import settings
+
 logger = get_logger(__name__)
 
 app = FastAPI(title="Supplier Quoter", version="v1")
@@ -22,6 +24,19 @@ SUPPLIER_ID = "SupplierQuoter_OnlineMartInc-v1"
 async def verify_token(authorization: Annotated[str | None, Header()] = None) -> str:
     # In a real app, this would involve JWT decoding and verification.
     # For MVP, we'll use a simple hardcoded bearer token check.
+
+    # If TEST_AUTH_BYPASS is true, allow the request
+    if settings.TEST_AUTH_BYPASS.lower() == 'true':
+        logger.warning("SupplierQuoter auth bypassed via TEST_AUTH_BYPASS=true")
+        # Return a consistent bypass token, or the original if present
+        if authorization:
+            try:
+                _, _, actual_token = authorization.partition(" ")
+                return actual_token if actual_token else "test-bypass-token"
+            except ValueError:
+                return "test-bypass-token" # Should not happen with typical headers
+        return "test-bypass-token"
+
     expected_scheme = "Bearer"
     expected_token = "test-token" # Only this token is valid for supplier_quoter
 

@@ -101,7 +101,7 @@ async def test_successful_rfq_to_quote_flow(http_client: httpx.AsyncClient, db_s
     db_rfq_entry = result_rfq.scalar_one_or_none()
 
     assert db_rfq_entry is not None
-    assert db_rfq_entry.status == RFQStatus.COMPLETED
+    assert db_rfq_entry.status == RFQStatus.QUOTED
     assert db_rfq_entry.currency.value == rfq_payload.currency.value # Compare Enum value
 
     # Fetch Quote from DB

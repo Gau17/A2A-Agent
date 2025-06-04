@@ -2,7 +2,7 @@
 
 This document provides detailed instructions for running, testing, and interacting with the A2A Procurement application services (`buyer_concierge` and `supplier_quoter`).
 
-For a high-level overview of the entire "SMB Procurement Concierge" project, please see the [main project README.md](../../README.md).
+For a high-level overview of the entire "SMB Procurement Concierge" project, please see the [main project README.md](./README.md).
 
 ## Project Structure
 
@@ -50,28 +50,22 @@ README.md                 # Main project overview
 
 ## Running the Application with Docker Compose
 
-All services are defined in `infra/docker-compose.yml` relative to the `a2a-procurement` directory.
+All services are defined in `infra/docker-compose.yml`.
 
-1.  **Navigate to the a2a-procurement directory** (if not already there):
-    ```bash
-    # Ensure you are in the A2A-Agent/a2a-procurement directory
-    # cd a2a-procurement 
-    ```
-
-2.  **Copy Environment File (if not already done)**:
+1.  **Copy Environment File (if not already done)**:
     If you haven't set up your environment variables, copy the example:
     ```bash
     cp .env.example .env 
     ```
     Review and update `.env` if necessary (though defaults should work for local Docker setup).
 
-3.  **Start all services**:
+2.  **Start all services**:
     This command will build the images if they don't exist (or if Dockerfile/context changed) and start the containers in detached mode.
     ```bash
     docker-compose -f infra/docker-compose.yml up -d --build
     ```
 
-4.  **View logs (optional)**:
+3.  **View logs (optional)**:
     To view logs for all services:
     ```bash
     docker-compose -f infra/docker-compose.yml logs -f
@@ -81,12 +75,12 @@ All services are defined in `infra/docker-compose.yml` relative to the `a2a-proc
     docker-compose -f infra/docker-compose.yml logs -f buyer_concierge
     ```
 
-5.  **Key Services and Ports**:
+4.  **Key Services and Ports**:
     -   `buyer_concierge`: Accessible on `http://localhost:8000` (host port mapped to container port 8080)
     -   `supplier_quoter`: Accessible on `http://localhost:8081` (host port mapped to container port 8080)
     -   `postgres`: Database service, port `5432` is exposed to the host but services connect via Docker network name `postgres`.
 
-6.  **Stop all services**:
+5.  **Stop all services**:
     ```bash
     docker-compose -f infra/docker-compose.yml down
     ```
@@ -186,7 +180,7 @@ The response will indicate success and include the quote received from the `supp
 ## Running Tests
 
 Tests are run within their respective Docker containers to ensure environment consistency.
-All commands should be run from the `A2A-Agent/a2a-procurement` directory.
+All commands should be run from the `A2A-Agent` directory (the project root).
 
 1.  **Run `buyer_concierge` unit tests**:
     ```bash
