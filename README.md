@@ -48,4 +48,4 @@ This project is currently in an early MVP stage. Contributions and suggestions a
 
 ## License
 
-This project is licensed under the [Specify License Type - e.g., Apache 2.0 License](./LICENSE) (assuming a LICENSE file exists or will be added).
+This project is licensed under the [MIT License] (./LICENSE).
