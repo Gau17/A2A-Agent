@@ -8,40 +8,44 @@ For a high-level overview of the entire "SMB Procurement Concierge" project, ple
 
 ```
 .github/                    # GitHub Actions workflows
-a2a-procurement/            # Main application source code and tests
-  buyer_concierge/          # Buyer Concierge FastAPI application
-    adapters/               # Adapters for external services (A2A client, DB)
-    service/                # Core service logic for RFQs
-    tests/                  # Unit tests for buyer_concierge
-    main.py                 # FastAPI app definition for buyer
-    models.py               # Pydantic models for buyer
-    Dockerfile
-  supplier_quoter/          # Supplier Quoter FastAPI application
-    service/                # Core service logic for quoting (mocked)
-    tests/                  # Unit tests for supplier_quoter
-    main.py                 # FastAPI app definition for supplier
-    models.py               # Pydantic models for supplier
-    catalog.py              # Mock product catalog
-    Dockerfile
-  shared/                   # Shared utilities (DB, logging, settings, models_db)
-  libs/                     # JSON schemas and potentially generated libraries
-    schemas/
-      rfq-v1.json
-      quote-v1.json
-  infra/                    # Infrastructure setup
-    docker-compose.yml      # Docker Compose configuration
-    terraform/              # Terraform scripts (if any)
-  scripts/                  # Utility scripts (linting, testing)
-  tests/                    # Integration tests
-    integration/
-      test_rfq_flow.py
-      conftest.py
-  .env.example              # Example environment variables
-  pyproject.toml            # Project metadata and dependencies (Poetry)
-  pytest.ini                # Pytest configuration
-  README.md                 # This file
-LICENSE                     # Main project license (if moved or copied here)
-# README.md (root)          # Main project overview
+  workflows/
+buyer_concierge/          # Buyer Concierge FastAPI application
+  adapters/               # Adapters for external services (A2A client, DB)
+  service/                # Core service logic for RFQs
+  tests/                  # Unit tests for buyer_concierge
+    adapters/             # Unit tests for buyer_concierge adapters
+    service/              # Unit tests for buyer_concierge service
+  main.py                 # FastAPI app definition for buyer
+  models.py               # Pydantic models for buyer
+  Dockerfile
+supplier_quoter/          # Supplier Quoter FastAPI application
+  service/                # Core service logic for quoting (mocked)
+  tests/                  # Unit tests for supplier_quoter
+  main.py                 # FastAPI app definition for supplier
+  models.py               # Pydantic models for supplier
+  catalog.py              # Mock product catalog
+  Dockerfile
+shared/                   # Shared utilities (DB, logging, settings, models_db)
+libs/                     # JSON schemas and potentially generated libraries
+  schemas/
+    rfq-v1.json
+    quote-v1.json
+infra/                    # Infrastructure setup
+  docker-compose.yml      # Docker Compose configuration
+  terraform/              # Terraform scripts (if any)
+  # cloudrun.yaml         # Optional: Google Cloud Run deployment configuration
+scripts/                  # Utility scripts (linting, testing)
+tests/                    # Integration tests
+  integration/
+    test_rfq_flow.py
+    conftest.py
+.python-version           # Specifies Python version for the project
+LICENSE                   # Project license
+pyproject.toml            # Project metadata and dependencies
+pytest.ini                # Pytest configuration
+README_detailed.md        # Detailed application documentation
+README.md                 # Main project overview
+# .env.example            # Example environment variables
 ```
 
 ## Running the Application with Docker Compose
