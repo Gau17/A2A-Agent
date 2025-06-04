@@ -48,4 +48,4 @@ This project is currently in an early MVP stage. Contributions and suggestions a
 
 ## License
 
-This project is licensed under the [MIT License] (./LICENSE).
+This project is licensed under the **[MIT License](./LICENSE).
